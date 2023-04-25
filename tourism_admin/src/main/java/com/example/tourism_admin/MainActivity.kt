@@ -2,6 +2,7 @@ package com.example.tourism_admin
 
 
 
+import android.app.PendingIntent.getActivity
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
@@ -9,6 +10,8 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.tourism_admin.databinding.ActivityMainBinding
 import com.google.firebase.database.*
 import java.util.*
@@ -17,16 +20,37 @@ import java.util.*
 class MainActivity : AppCompatActivity() {
     var databaseReference: DatabaseReference? = null
     var eventListener: ValueEventListener? = null
-    private lateinit var dataList: ArrayList<DataClass>
-    private lateinit var adapter: MyAdapter
     private lateinit var binding: ActivityMainBinding
+
+    private lateinit var recyclerView: RecyclerView
+    private lateinit var searchView: SearchView
+    private var mList = ArrayList<DataClass>()
+    private lateinit var adapter: locationsAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val gridLayoutManager = GridLayoutManager(this@MainActivity, 1)
+
+        recyclerView = binding.recyclerView
+
+        recyclerView.setHasFixedSize(true)
+        recyclerView.layoutManager = LinearLayoutManager(this);
+
+        addDataToList()
+        adapter = locationsAdapter(mList)
+        recyclerView.adapter = adapter
+
+        //Setting onclick on recyclerView each item
+        adapter.setOnItemClickListner(object : locationsAdapter.onItemClickListner {
+            override fun onItemClick(position: Int) {
+            }
+
+        })
+
+
+        /*val gridLayoutManager = GridLayoutManager(this@MainActivity, 1)
         binding.recyclerView.layoutManager = gridLayoutManager
         binding.search.clearFocus()
 
@@ -39,7 +63,7 @@ class MainActivity : AppCompatActivity() {
         dataList = ArrayList()
         adapter = MyAdapter(this@MainActivity, dataList)
         binding.recyclerView.adapter = adapter
-        databaseReference = FirebaseDatabase.getInstance().getReference("Todo List")
+        //databaseReference = FirebaseDatabase.getInstance().getReference("Todo List")
         dialog.show()
 
         eventListener = databaseReference!!.addValueEventListener(object : ValueEventListener {
@@ -86,5 +110,18 @@ class MainActivity : AppCompatActivity() {
             }
         }
         adapter.searchDataList(searchList)
+    }*/
     }
+
+    private fun addDataToList() {
+        mList.add(DataClass("", "Sigiriya", " csjhc jhsd jvk", "4",))
+        mList.add(DataClass("", "Sigiriya", " csjhc jhsd jvk", "4",))
+        mList.add(DataClass("", "Sigiriya", " csjhc jhsd jvk", "4",))
+        mList.add(DataClass("", "Sigiriya", " csjhc jhsd jvk", "4",))
+        mList.add(DataClass("", "Sigiriya", " csjhc jhsd jvk", "4",))
+        mList.add(DataClass("", "Sigiriya", " csjhc jhsd jvk", "4",))
+        mList.add(DataClass("", "Sigiriya", " csjhc jhsd jvk", "4",))
+
+    }
+
 }
